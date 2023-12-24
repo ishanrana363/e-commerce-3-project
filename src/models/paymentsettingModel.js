@@ -34,3 +34,7 @@ const dataSchema = new mongoose.Schema({
         required : true
     }
 },{timestamps:true,versionKey:false})
+
+const paymentsetting = mongoose.model("paymentsettings",dataSchema);
+
+module.exports = paymentsetting

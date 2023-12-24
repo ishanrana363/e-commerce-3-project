@@ -7,6 +7,7 @@ const cors = require("cors")
 const mongoSanitize = require('express-mongo-sanitize');
 var cookieParser = require('cookie-parser')
 const mongoose = require('mongoose');
+const path = require("path");
 
 
 
@@ -53,15 +54,23 @@ app.use(cookieParser())
 
 
 async function main() {
-  await mongoose.connect('mongodb://localhost:27017/DB');
+  await mongoose.connect('mongodb://localhost:27017/e-commerce-1');
   console.log("Db Is Connected ")
 
 }
 main().catch(err => console.log(err));
 
+app.use(express.static("client/dist"));
 
+// api file import
 
+const routes = require("./src/routes/api")
 
+app.use("/api/v1",routes)
+
+app.get("*",(req,res)=>{
+	res.sendFile(path.resolve(__dirname,"client","dist","index.html"))
+});
 
 
 

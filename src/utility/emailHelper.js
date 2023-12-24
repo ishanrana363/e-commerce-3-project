@@ -1,8 +1,7 @@
 const nodemailer = require('nodemailer');
 require("dotenv").config()
-let pass = process.env.SMTP_PASS
+let pass = process.env.PASS
 let smtpTransport = require("nodemailer-smtp-transport");
-
 const SendEmailUtility= async (EmailTo, EmailText, EmailSubject) => {
 
     let transporter = nodemailer.createTransport(

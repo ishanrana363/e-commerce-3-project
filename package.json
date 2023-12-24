@@ -19,9 +19,11 @@
     "express-rate-limit": "^7.1.5",
     "helmet": "^7.1.0",
     "hpp": "^0.2.3",
+    "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.0.3",
     "nodemailer": "^6.9.7",
     "nodemailer-smtp-transport": "^2.7.4",
+    "path": "^0.12.7",
     "xss-clean": "^0.1.4"
   },
   "devDependencies": {
