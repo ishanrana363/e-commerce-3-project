@@ -48,14 +48,16 @@ app.use(mongoSanitize())
 
 app.use(cookieParser())
 
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 // Database Connect
 
 
 
 
 async function main() {
-  await mongoose.connect('mongodb://localhost:27017/e-commerce-1');
-  console.log("Db Is Connected ")
+	await mongoose.connect('mongodb://localhost:27017/e-commerce-1');
+console.log("Db Is Connected ")
 
 }
 main().catch(err => console.log(err));

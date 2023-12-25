@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const productController = require("../controllers/productController");
 const userController = require("../controllers/userController")
+const authmiddleware = require("../middleware/authmiddleware")
 
 router.get("/productCategoryList",productController.productCategoryList);
 router.get("/productBrandList",productController.productBrandList);
@@ -17,7 +18,10 @@ router.get("/productReviewList/:productID",productController.productReviewList);
 // user controllers
 
 router.get("/otp/:email", userController.userOtp);
-router.get("/otp-verify/:email/:otp", userController.userLoginVerify);
+router.get("/otp-verify/:email/:otp",userController.userLoginVerify);
+router.get("/logout",authmiddleware, userController.userLogout);
+router.post("/create-profile",authmiddleware, userController.createProfile);
+router.post("/update-profile",authmiddleware, userController.updateProfile);
 
 
 

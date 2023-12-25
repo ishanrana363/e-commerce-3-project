@@ -1,6 +1,7 @@
 const SendEmailUtility = require("../utility/emailHelper")
 const usersModel = require("../models/usersModel")
 const {EncodeToken} = require("../utility/tokenHelper");
+const profileModel = require("../models/profilesModel")
 const userOtpService = async (req) => {
     try {
         let email = req.params.email;
@@ -29,7 +30,7 @@ const userOtpVerifyService = async (req) =>{
         let total = await usersModel.find({email:email,otp:otp}).count("total");
         if(total==1){
             const user_id = await usersModel.find({email:email,otp:otp}).select("_id");
-            let token = EncodeToken(email,user_id[0],["_id"].toString());
+            let token = EncodeToken(email,user_id[0]["_id"].toString());
             await usersModel.updateOne({email:email},{$set:{otp:0}});
             return{
                 status: "success",
@@ -49,16 +50,35 @@ const userOtpVerifyService = async (req) =>{
     }
 }
 
-const userLogoutService = async () =>{
-    
+
+const createProfileService = async (req) =>{
+    try {
+        let user_id = req.headers.user_id;
+        let reqBody = req.body;
+        reqBody.userID = user_id;
+        let data = await profileModel.updateOne({userID:user_id},{$set:reqBody},{upsert:true})
+        return {
+            status : "success",
+            data : data
+        }
+    }catch (e) {
+        return {status:"fail", data : e.toString()}
+    }
 }
 
-const createProfileService = async () =>{
-    
-}
-
-const updateProfileService = async () =>{
-    
+const updateProfileService = async (req) =>{
+    try {
+        let user_id = req.headers.user_id;
+        let reqBody = req.body;
+        reqBody.userID = user_id;
+        let data = await profileModel.updateOne({userID:user_id},{$set:reqBody},{upsert:true})
+        return {
+            status : "success",
+            data : data
+        }
+    }catch (e) {
+        return {status:"fail", data : e.toString()}
+    }
 }
 const ProfileReadService = async () =>{
     
@@ -68,7 +88,6 @@ const ProfileReadService = async () =>{
 module.exports = {
     userOtpService,
     userOtpVerifyService,
-    userLogoutService,
     createProfileService,
     updateProfileService,
     ProfileReadService
