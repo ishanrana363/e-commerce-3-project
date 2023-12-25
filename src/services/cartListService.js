@@ -38,7 +38,6 @@ const cartListService = async (req) => {
         //using project operator for removing unnecessary data wishesModel
         let projection = {
             $project : {
-                "_id" : 0,
                 "userID" : 0,
                 "createdAt" : 0,
                 "updatedAt" : 0,
@@ -109,12 +108,30 @@ const removeCartListService = async (req) => {
         }
     }
 }
-
+const updateCartListService = async (req) => {
+    try {
+        let user_id = req.headers.user_id;
+        let cartID = req.params.cartID
+        let reqBody = req.body;
+        let data = await cartsModel.updateOne(
+            {_id:cartID , userID: user_id },{$set:reqBody});
+        return{
+            status : "success",
+            data : data
+        }
+    }catch (e) {
+        return {
+            status : "fail",
+            data : e.toString()
+        }
+    }
+}
 
 module.exports = {
     cartListService,
     creatCartListService,
-    removeCartListService
+    removeCartListService,
+    updateCartListService
 }
 
 

@@ -36,7 +36,9 @@ router.post("/remove-wish-list" , authmiddleware, wishController.removeWishContr
 
 router.get("/cart", authmiddleware, cartController.cartList);
 router.post("/create-cart", authmiddleware, cartController.createCartList);
+router.delete("/remove-cart", authmiddleware, cartController.removeCartList);
 router.post("/remove-cart", authmiddleware, cartController.removeCartList);
+router.post("/update-cart/:cartID", authmiddleware,cartController.updateCartList);
 
 
 module.exports = router
