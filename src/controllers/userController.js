@@ -13,12 +13,10 @@ exports.userOtp = async(req,res)=>{
 }
 
 exports.userLoginVerify = async(req,res)=>{
-    
+    let result = await userOtpVerifyService(req);
+    res.status(200).json(result)
 }
 
-exports.userLoginVerify = async(req,res)=>{
-    
-}
 
 exports.userLogout = async (req,res) =>{
 

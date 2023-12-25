@@ -17,6 +17,8 @@ router.get("/productReviewList/:productID",productController.productReviewList);
 // user controllers
 
 router.get("/otp/:email", userController.userOtp);
+router.get("/otp-verify/:email/:otp", userController.userLoginVerify);
+
 
 
 
