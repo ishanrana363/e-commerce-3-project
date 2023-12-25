@@ -4,6 +4,7 @@ const productController = require("../controllers/productController");
 const userController = require("../controllers/userController")
 const authmiddleware = require("../middleware/authmiddleware")
 const wishController = require("../controllers/wishController")
+const cartController = require("../controllers/cartController")
 
 router.get("/productCategoryList",productController.productCategoryList);
 router.get("/productBrandList",productController.productBrandList);
@@ -27,9 +28,15 @@ router.get("/profile-read",authmiddleware, userController.readProfile);
 
 // wish controller api
 
-router.post("/wish-list" , authmiddleware, wishController.wishController);
+router.get("/wish-list" , authmiddleware, wishController.wishController);
 router.post("/create-wish" , authmiddleware, wishController.saveWishController);
 router.post("/remove-wish-list" , authmiddleware, wishController.removeWishController);
+
+// cart
+
+router.get("/cart", authmiddleware, cartController.cartList);
+router.post("/create-cart", authmiddleware, cartController.createCartList);
+router.post("/remove-cart", authmiddleware, cartController.removeCartList);
 
 
 module.exports = router
