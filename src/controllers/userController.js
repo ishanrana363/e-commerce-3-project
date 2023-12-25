@@ -51,5 +51,6 @@ exports.updateProfile = async (req,res) =>{
     res.status(200).json(result)
 }
 exports.readProfile = async (req,res)=>{
-
+    let result = await ProfileReadService(req)
+    res.status(200).json(result)
 }

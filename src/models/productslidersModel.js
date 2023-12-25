@@ -20,10 +20,9 @@ const dataSchema = new mongoose.Schema({
     },
     productID : {
         type : mongoose.Schema.Types.ObjectId,
-        requird : true
+        required: true
     }
 },{timestamps:true,versionKey:false});
-
 const productslidersModel = mongoose.model("productsliders",dataSchema);
 
 module.exports = productslidersModel;

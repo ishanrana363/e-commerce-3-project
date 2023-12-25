@@ -3,6 +3,7 @@ const router = express.Router();
 const productController = require("../controllers/productController");
 const userController = require("../controllers/userController")
 const authmiddleware = require("../middleware/authmiddleware")
+const wishController = require("../controllers/wishController")
 
 router.get("/productCategoryList",productController.productCategoryList);
 router.get("/productBrandList",productController.productBrandList);
@@ -22,8 +23,13 @@ router.get("/otp-verify/:email/:otp",userController.userLoginVerify);
 router.get("/logout",authmiddleware, userController.userLogout);
 router.post("/create-profile",authmiddleware, userController.createProfile);
 router.post("/update-profile",authmiddleware, userController.updateProfile);
+router.get("/profile-read",authmiddleware, userController.readProfile);
 
+// wish controller api
 
+router.post("/wish-list" , authmiddleware, wishController.wishController);
+router.post("/create-wish" , authmiddleware, wishController.saveWishController);
+router.post("/remove-wish-list" , authmiddleware, wishController.removeWishController);
 
 
 module.exports = router

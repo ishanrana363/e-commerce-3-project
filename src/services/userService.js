@@ -80,8 +80,20 @@ const updateProfileService = async (req) =>{
         return {status:"fail", data : e.toString()}
     }
 }
-const ProfileReadService = async () =>{
-    
+const ProfileReadService = async (req) =>{
+    try{
+        let user_id = req.headers.user_id;
+        let data = await profileModel.findOne({userID:user_id});
+        return{
+            status : "success",
+            data : data
+        }
+    }catch(e){
+        return {
+            status:"fail",
+            data : e.toString()
+    }
+    }
 }
 
 
