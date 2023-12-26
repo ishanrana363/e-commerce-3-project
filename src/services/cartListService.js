@@ -111,7 +111,7 @@ const removeCartListService = async (req) => {
 const updateCartListService = async (req) => {
     try {
         let user_id = req.headers.user_id;
-        let cartID = req.params.cartID
+        let cartID = req.params.cartID;
         let reqBody = req.body;
         let data = await cartsModel.updateOne(
             {_id:cartID , userID: user_id },{$set:reqBody});

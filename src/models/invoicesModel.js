@@ -2,44 +2,44 @@ const  mongoose  = require("mongoose");
 
 const dataSchema = new mongoose.Schema({
     userID : {
-        type : mongoose.Schema.Types,
-        requird : true
+        type : mongoose.Schema.Types.ObjectId,
+        required : true
     },
     payable : {
         type : String,
-        requird : true
+        required : true
     },
     cus_details : {
         type : String,
-        requird : true
+        required : true
     },
     ship_details : {
         type : String,
-        requird : true
+        required : true
     },
     tran_id : {
         type : String,
-        requird : true
+        required : true
     },
     val_id : {
         type : String,
-        requird : true
+        required : true
     },
     delivery_status : {
         type : String,
-        requird : true
+        required : true
     },
     payment_status : {
         type : String,
-        requird : true
+        required : true
     },
     total : {
         type : String,
-        requird : true
+        required : true
     },
     vat : {
         type : String,
-        requird : true
+        required : true
     }
 },{timestamps:true,versionKey:false});
 

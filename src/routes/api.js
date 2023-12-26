@@ -5,6 +5,7 @@ const userController = require("../controllers/userController")
 const authmiddleware = require("../middleware/authmiddleware")
 const wishController = require("../controllers/wishController")
 const cartController = require("../controllers/cartController")
+const invoicesController = require("../controllers/invoicesController")
 
 router.get("/productCategoryList",productController.productCategoryList);
 router.get("/productBrandList",productController.productBrandList);
@@ -39,6 +40,11 @@ router.post("/create-cart", authmiddleware, cartController.createCartList);
 router.delete("/remove-cart", authmiddleware, cartController.removeCartList);
 router.post("/remove-cart", authmiddleware, cartController.removeCartList);
 router.post("/update-cart/:cartID", authmiddleware,cartController.updateCartList);
+
+// invoice & payment
+
+router.get("/create-invoice", authmiddleware,invoicesController.crateInvoice )
+
 
 
 module.exports = router

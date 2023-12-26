@@ -37,6 +37,10 @@ const dataSchema = new mongoose.Schema({
         type : String,
         required : true
     },
+    ship_name: {
+        type : String,
+        required : true
+    },
     ship_add: {
         type : String,
         required : true
