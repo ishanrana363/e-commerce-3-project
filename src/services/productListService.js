@@ -5,6 +5,7 @@ const productsModel = require("../models/productsModel")
 const reviewModel = require("../models/reviewModel")
 
 const  mongoose  = require("mongoose");
+const {mongo} = require("mongoose");
 
 // productCategoryListService start
 
@@ -447,7 +448,25 @@ const ListByKeywordService = async (req) => {
 
 
 const productReviewListService = async (req) =>{
-    
+    try {
+        let productId = new mongoose.Types.ObjectId(req.params.productID);
+        let matchStage = { $match : { productID : productId } }
+        let joinWithUserId = {
+            $lookup : {
+                from:"profiles",localField:"userID",foreignField:"userID",as:"user"
+            }
+        }
+        let data = await reviewModel.aggregate([
+            matchStage,joinWithUserId
+        ])
+        console.log(data)
+        return {
+            status : "success",
+            data : data
+        }
+    }catch (e) {
+
+    }
 }
 
 module.exports = {
