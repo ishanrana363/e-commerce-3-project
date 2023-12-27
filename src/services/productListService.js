@@ -417,7 +417,33 @@ const productDetailsService = async (req) =>{
     }
 }
 
-// productDetailsService end
+// product by keyword
+
+const ListByKeywordService = async (req) => {
+    try{
+        let SearchRegex={"$regex":req.params.keyword, "$options":"i"}
+        let SearchParams=[{title:SearchRegex},{shortDes:SearchRegex}]
+        let SearchQuery={$or:SearchParams}
+
+        let MatchStage={$match:SearchQuery}
+
+        let JoinWithBrandStage= {$lookup:{from:"brands",localField:"brandID",foreignField:"_id",as:"brand"}};
+        let JoinWithCategoryStage={$lookup:{from:"categories",localField:"categoryID",foreignField:"_id",as:"category"}};
+        let UnwindBrandStage={$unwind:"$brand"}
+        let UnwindCategoryStage={$unwind:"$category"}
+        let ProjectionStage={$project:{'brand._id':0,'category._id':0,'categoryID':0,'brandID':0}}
+
+        let data= await  productsModel.aggregate([
+            MatchStage, JoinWithBrandStage,JoinWithCategoryStage,
+            UnwindBrandStage,UnwindCategoryStage,ProjectionStage
+        ])
+        return {status:"success",data:data}
+    }catch (e) {
+        return {status:"fail",data:e}.toString()
+    }
+
+}
+
 
 
 const productReviewListService = async (req) =>{
@@ -434,6 +460,6 @@ module.exports = {
     productByKeyWordService,
     productDetailsService,
     productRemarkListService,
-    productRemarkListService,
-    productReviewListService
+    productReviewListService,
+    ListByKeywordService
 }

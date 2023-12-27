@@ -45,6 +45,15 @@ router.post("/update-cart/:cartID", authmiddleware,cartController.updateCartList
 
 router.get("/create-invoice", authmiddleware,invoicesController.crateInvoice )
 
+router.post("/payment-fail/:trxID",invoicesController.paymentFailController );
+router.post("/payment-cancel/:trxID",invoicesController.paymentCancelController );
+router.post("/payment-ipn/:trxID",invoicesController.paymentIpnController )
+router.post("/payment-successful/:trxID",invoicesController.paymentSuccessfulController )
+
+
+
+
+
 
 
 module.exports = router

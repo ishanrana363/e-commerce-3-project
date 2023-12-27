@@ -6,7 +6,7 @@
     productByCategoryListService,
     productByBrandListService,
     productBySimilerListService,
-    productByKeyWordService,
+     ListByKeywordService,
     productDetailsService,
     productRemarkListService,
     productReviewListService
@@ -62,7 +62,8 @@ exports.productBySimilerList = async (req,res) =>{
 }
 
 exports.productByKeyWord = async (req,res) =>{
-
+    let result = await ListByKeywordService(req);
+    res.status(200).json(result)
 }
 
 exports.productDetails = async (req,res)=>{

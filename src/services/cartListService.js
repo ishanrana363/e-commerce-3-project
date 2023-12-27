@@ -2,74 +2,47 @@ const mongoose = require("mongoose");
 
 const cartsModel  = require("../models/cartsModel")
 const cartListService = async (req) => {
-    try{
-        let user_id = new mongoose.Types.ObjectId(req.headers.user_id);
-        let matchStage = { $match : { userID : user_id } };
+    try {
 
-        //join with productID
-        let joinWithProductID = {
-            $lookup : {
-                from : 'products', localField:"productID",foreignField:"_id",as:"product"
+        let user_id=new mongoose.Types.ObjectId(req.headers.user_id);
+        let matchStage={$match:{userID:user_id}}
+
+        let JoinStageProduct={$lookup:{from:"products",localField:"productID",foreignField:"_id",as:"product"}}
+        let unwindProductStage={$unwind:"$product"};
+
+
+        let JoinStageBrand={$lookup:{from:"brands",localField:"product.brandID",foreignField:"_id",as:"brand"}}
+        let unwindBrandStage={$unwind:"$brand"};
+
+
+        let JoinStageCategory={$lookup:{from:"categories",localField:"product.categoryID",foreignField:"_id",as:"category"}}
+        let unwindCategoryStage={$unwind:"$category"};
+
+
+        let projectionStage={$project:{
+                '_id':0,'userID':0,'createAt':0,'updatedAt':0, 'product._id':0,
+                'product.categoryID':0,'product.brandID':0,
+                'brand._id':0,'category._id':0,
             }
-        }
-        // unwind product
-        const unwindProduct = {
-            $unwind : "$product"
-        }
-        // join with categoryID
-        let joinWithCategory = {
-            $lookup : {
-                from : 'categories', localField:"product.categoryID",foreignField:"_id",as:"category"
-            }
-        }
-        // unwind category
-        let unwindCategory = {
-            $unwind: "$category"
         }
 
-        // join with brandID
-        let joinWithBrandID = {
-            $lookup : {
-                from : 'brands', localField:"product.brandID",foreignField:"_id",as:"brand"
-            }
-        }
-        // unwind brand
-        const unwindBrand = { $unwind : "$brand" }
-        //using project operator for removing unnecessary data wishesModel
-        let projection = {
-            $project : {
-                "userID" : 0,
-                "createdAt" : 0,
-                "updatedAt" : 0,
-                "product._id" : 0,
-                "product.createdAt" : 0,
-                "product.updatedAt" : 0,
-                "brand._id" : 0,
-                "brand.createdAt" : 0,
-                "brand.updatedAt" : 0,
-                "category._id" : 0,
-                "category.createdAt" : 0,
-                "category.updatedAt" : 0
-
-            }
-        }
-        const data = await cartsModel.aggregate([
+        let data=await cartsModel.aggregate([
             matchStage,
-            joinWithProductID,joinWithCategory,joinWithBrandID,
-            unwindProduct,unwindCategory,unwindBrand,
-            projection
-        ])
-        return {
-            status : "success",
-            data : data
-        }
-    }catch (e) {
-        return {
-            status : "fail",
-            data : e.toString()
-        }
-    }
+            JoinStageProduct,
+            unwindProductStage,
+            JoinStageBrand,
+            unwindBrandStage,
+            JoinStageCategory,
+            unwindCategoryStage,
+            projectionStage
 
+        ])
+
+        return {status:"success",data:data}
+
+    }catch (e) {
+        return {status:"fail",message:"Something Went Wrong !"}
+    }
 }
 
 const creatCartListService = async (req) => {
