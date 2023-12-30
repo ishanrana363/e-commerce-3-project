@@ -453,9 +453,10 @@ const productReviewListService = async (req) =>{
         let matchStage = { $match : { productID : productId } }
         let joinWithUserId = {
             $lookup : {
-                from:"profiles",localField:"userID",foreignField:"userID",as:"user"
+                from:"profiles",localField:"userID",foreignField:"_id",as:"user"
             }
         }
+        console.log(joinWithUserId)
         let data = await reviewModel.aggregate([
             matchStage,joinWithUserId
         ])

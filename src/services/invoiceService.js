@@ -46,9 +46,14 @@ const createInvoiceService = async (req) => {
     // step prepare customer details
 
     let profile = await profilesModel.aggregate([{$match : { userID : user_id }}])
-    let cus_details= `Name : ${ profile[0].cus_name }, Email : ${cus_email} , 
-    Address : ${profile[0].cus_add}, 
-    City : ${profile[0].cus_city},Country : ${profile[0].cus_country}, Number : ${profile[0].cus_fax}`;
+
+    let cus_details = `Name: ${profile[0].cus_name},
+        Email: ${cus_email},
+        Address: ${profile[0].cus_add},
+        City: ${profile[0].cus_city},
+        Country: ${profile[0].cus_country},
+        Number: ${profile[0].cus_fax}`;
+
 
     let ship_details= `Name : ${profile[0].ship_name }, Country : ${profile[0].cus_state } ,
      Address : ${profile[0].ship_add}, 
