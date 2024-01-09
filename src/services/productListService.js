@@ -5,7 +5,6 @@ const productsModel = require("../models/productsModel")
 const reviewModel = require("../models/reviewModel")
 
 const  mongoose  = require("mongoose");
-const {mongo} = require("mongoose");
 
 // productCategoryListService start
 
@@ -32,7 +31,7 @@ const productBrandListService = async (req) =>{
     try{
         let data = await brandsModel.find();
         return{
-            status : " Success",
+            status : "success",
             data : data
         }
     }catch(e){
@@ -349,7 +348,7 @@ const productBySimilerListService = async (req) => {
 
 
 const productByKeyWordService = async () =>{
-    
+
 
 }
 
@@ -391,7 +390,7 @@ const productDetailsService = async (req) =>{
         // join product id
         let joinWithProductID = {
             $lookup : {
-                from:"productdetails",
+                from:"productsdetails",
                 localField:"_id",
                 foreignField:"productID",
                 as:"product"
@@ -403,8 +402,6 @@ const productDetailsService = async (req) =>{
             matchStage,
             joinWithBrandID,joinWithCategoryId,joinWithProductID
         ])
-        console.log(data)
-
         return {
             status: "success",
             data: data
@@ -453,24 +450,44 @@ const productReviewListService = async (req) =>{
         let matchStage = { $match : { productID : productId } }
         let joinWithUserId = {
             $lookup : {
-                from:"profiles",localField:"userID",foreignField:"_id",as:"user"
+                from:"profiles",localField:"userID",foreignField:"userID",as:"user"
             }
         }
-        console.log(joinWithUserId)
+        let ProjectionStage= {$project: {'des': 1, 'rating': 1, 'profile.cus_name': 1}}
         let data = await reviewModel.aggregate([
-            matchStage,joinWithUserId
+            matchStage,joinWithUserId,ProjectionStage
         ])
-        console.log(data)
         return {
             status : "success",
             data : data
         }
     }catch (e) {
-
+        return {status:"fail",data:e.toString()}
     }
 }
 
+const productCreateReviewService = async (req) => {
+    try {
+        let user_id = req.headers.user_id;
+        let reqBody = req.body;
+        let data = await reviewModel.create({
+            userID:user_id,
+            productID : reqBody["productID"],
+            des : reqBody["des"],
+            rating : reqBody["rating"]
+        })
+        return {
+            status : "success",
+            data : data
+        }
+    }catch (e) {
+        return {status:"fail",data:e.toString()}
+    }
+}
+
+
 module.exports = {
+    productCreateReviewService,
     productCategoryListService,
     productBrandListService,
     productSliderService,

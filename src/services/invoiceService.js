@@ -40,7 +40,8 @@ const createInvoiceService = async (req) => {
 
 
     let vat = totalAmount * 0.05; // 5% VAT
-    let payable = totalAmount + vat; // Total amount including VAT
+    let delivery_charge = 120
+    let payable = totalAmount + vat +delivery_charge ; // Total amount including VAT
 
 
     // step prepare customer details
@@ -80,6 +81,7 @@ const createInvoiceService = async (req) => {
         payment_status: payment_status ,
         total: totalAmount ,
         vat:vat,
+        delivery_charge:delivery_charge,
     })
 
 
@@ -147,7 +149,6 @@ const createInvoiceService = async (req) => {
     form.append('product_profile', 'profile');
     form.append('product_amount', '3');
     let SSLRes = await axios.post(PaymentSetting[0]['init_url'], form);
-    console.log(SSLRes.data)
 
     return {status:"success",data: SSLRes.data}
 }
@@ -195,8 +196,40 @@ const PaymentSuccessService = async (req)=>{
     }
 }
 
+const invoiceListService = async (req) => {
+   try {
+       let user_id = req.headers.user_id;
+       let data = await invoicesModel.find({userID : user_id })
+       return{
+           status:"success", data : data
+       }
+   } catch (e) {
+       return {status:"fail", message:"Something Went Wrong"}
+   }
+}
+
+const invoiceProductListService = async (req) => {
+    try{
+
+        let user_id=new mongoose.Types.ObjectId(req.headers.user_id);
+        let invoice_id=new mongoose.Types.ObjectId(req.params.invoiceID);
+
+        let matchStage={$match:{userID:user_id,invoiceID:invoice_id}}
+        let JoinStageProduct={$lookup:{from:"products",localField:"productID",foreignField:"_id",as:"product"}}
+        // let unwindStage={$unwind:"$product"}
+
+        let products=await invoiceproductsModel.aggregate([
+            matchStage,
+            JoinStageProduct,
+            // unwindStage
+        ])
 
 
+        return {status:"success",data: products}
+    }catch (e) {
+        return {status:"fail", message:"Something Went Wrong"}
+    }
+};
 
 
 
@@ -206,7 +239,9 @@ module.exports = {
     PaymentFailService,
     PaymentCancelService,
     PaymentIPNService,
-    PaymentSuccessService
+    PaymentSuccessService,
+    invoiceListService,
+    invoiceProductListService
 
 }
 

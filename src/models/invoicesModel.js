@@ -40,6 +40,10 @@ const dataSchema = new mongoose.Schema({
     vat : {
         type : String,
         required : true
+    },
+    delivery_charge : {
+        type : Number,
+        required : true
     }
 },{timestamps:true,versionKey:false});
 

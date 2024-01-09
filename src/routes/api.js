@@ -6,9 +6,11 @@ const authmiddleware = require("../middleware/authmiddleware")
 const wishController = require("../controllers/wishController")
 const cartController = require("../controllers/cartController")
 const invoicesController = require("../controllers/invoicesController")
+const featuresController = require("../controllers/featuresController")
+const {productCreateReviewService} = require("../services/productListService");
 
-router.get("/productCategoryList",productController.productCategoryList);
 router.get("/productBrandList",productController.productBrandList);
+router.get("/productCategoryList",productController.productCategoryList);
 router.get("/productSlider",productController.productSlider);
 router.get("/productByCategoryList/:categoryID",productController.productByCategoryList);
 router.get("/productByBrandList/:brandID",productController.productByBrandList);
@@ -47,8 +49,15 @@ router.get("/create-invoice", authmiddleware,invoicesController.crateInvoice )
 
 router.post("/payment-fail/:trxID",invoicesController.paymentFailController );
 router.post("/payment-cancel/:trxID",invoicesController.paymentCancelController );
-router.post("/payment-ipn/:trxID",invoicesController.paymentIpnController )
-router.post("/payment-successful/:trxID",invoicesController.paymentSuccessfulController )
+router.post("/payment-ipn/:trxID",invoicesController.paymentIpnController );
+router.post("/payment-successful/:trxID",invoicesController.paymentSuccessfulController );
+router.get("/invoicelist", authmiddleware, invoicesController.invoiceListController);
+router.get("/invoice-product-list/:invoiceID", authmiddleware, invoicesController.invoiceProductListController);
+
+// feature
+
+router.get("/feature-list",featuresController.featureListController)
+router.post("/review-create",  authmiddleware, productController.productCreateReviewController)
 
 
 

@@ -12,6 +12,10 @@ const dataSchema = new mongoose.Schema({
     des : {
         type : String,
         required : true
+    },
+    rating : {
+        type : String,
+        required : true
     }
 },{timestamps:true,versionKey:false});
 

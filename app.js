@@ -53,10 +53,12 @@ app.use(express.json());
 // Database Connect
 
 
+require("dotenv").config();
+let dbUrl = process.env.db_url
 
 
 async function main() {
-	await mongoose.connect('mongodb://localhost:27017/e-commerce-1');
+	await mongoose.connect(dbUrl);
 console.log("Db Is Connected ")
 
 }
@@ -70,9 +72,10 @@ const routes = require("./src/routes/api")
 app.use("/api/v1",routes)
 
 app.use(express.static("client/dist"));
+
 app.get("*",(req,res)=>{
-	res.sendFile(path.resolve(__dirname,"client","dist","index.html"))
-});
+	res.sendFile( path.resolve(__dirname,"client","dist","index.html") )
+})
 
 
 

@@ -9,7 +9,8 @@
      ListByKeywordService,
     productDetailsService,
     productRemarkListService,
-    productReviewListService
+    productReviewListService,
+     productCreateReviewService
 } = 
     require("../services/productListService") 
 
@@ -75,4 +76,9 @@ exports.productDetails = async (req,res)=>{
 exports.productReviewList = async (req,res)=>{
     let result = await productReviewListService(req);
     res.status(200).json(result)
+}
+
+exports.productCreateReviewController = async (req,res) =>{
+    let result = await productCreateReviewService(req);
+    res.status(201).json(result)
 }
