@@ -3,10 +3,10 @@ import axios from "axios";
 
 const productStore = create((set)=>({
     BrandList :null,
-    CategoryList : [],
-    Slider : [],
-    ByBrandList : [],
-    ByCategoryList : [],
+    CategoryList : null,
+    SliderList : null ,
+    ByBrandList : null,
+    ByCategoryList : null ,
     RemarkList : [],
     BySimilerList : [],
     ByKeyWord : [],
@@ -30,7 +30,7 @@ const productStore = create((set)=>({
     SliderRequest : async () =>{
         let res = await axios.get("/api/v1/productSlider");
         if ( res.data["status"] === "success"){
-            set({ Slider : res.data["data"] })
+            set({ SliderList : res.data["data"] })
         }
     },
 
