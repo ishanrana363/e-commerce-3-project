@@ -9,7 +9,7 @@ const Feature = () => {
     else {
         return (
             <div>
-                Feature
+
             </div>
         );
     }

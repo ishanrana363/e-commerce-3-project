@@ -3,8 +3,8 @@ import productStore from "../../store/ProductStore.js";
 import SliderSkeleton from "../../skeleton/SliderSkeleton.jsx";
 
 const Slider = () => {
-    const {sliderList} = productStore()
-    if (sliderList===null){
+    const {Slider} = productStore()
+    if (Slider===null){
         return <SliderSkeleton/>
     }else {
         return (

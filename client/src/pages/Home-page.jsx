@@ -11,15 +11,15 @@ import {useEffect} from "react";
 
 
 const HomePage = () => {
-    const {productBrandListRequest,categoryListRequest,sliderListRequest,remarkListRequest} = productStore()
+    const {BrandListRequest,CategoryListRequest,SliderRequest,RemarkListRequest} = productStore()
     const {FeatureListRequest} = featureStore()
     useEffect(() => {
         (async ()=>{
-            await sliderListRequest();
+            await SliderRequest();
             await FeatureListRequest();
-            await categoryListRequest();
-            await remarkListRequest("new");
-            await productBrandListRequest()
+            await CategoryListRequest();
+            await RemarkListRequest("new");
+            await BrandListRequest()
         }) ()
     }, []);
     return (
