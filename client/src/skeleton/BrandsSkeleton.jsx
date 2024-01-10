@@ -3,14 +3,13 @@ import Skeleton from "react-loading-skeleton";
 import Lottie from "lottie-react";
 import ImagePlaceholder from "../assets/images/image.json"
 
-const CategoriesSkeleton = () => {
+const BrandsSkeleton = () => {
     return (
         <div className="section">
             <div className="container">
                 <div className="row">
-                    <h1 className="headline-4 text-center my-2 p-0">Top Categories</h1>
+                    <h1 className="headline-4 text-center my-2 p-0">Top Brands</h1>
                     <span className="bodySmal mb-5 text-center">Explore a World of Choices Across Our Most Popular <br />Shopping Categories </span>
-
                     {
                         Array.from({length:16}).map(()=>{
                             return(
@@ -28,7 +27,8 @@ const CategoriesSkeleton = () => {
                 </div>
             </div>
         </div>
+
     );
 };
 
-export default CategoriesSkeleton;
+export default BrandsSkeleton;
