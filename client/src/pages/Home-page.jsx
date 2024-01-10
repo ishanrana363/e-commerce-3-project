@@ -1,7 +1,12 @@
+import Layout from "../components/layout/Layout.jsx";
+
 const HomePage = () => {
     return (
         <div>
-            ishan
+            <Layout>
+
+                
+            </Layout>
         </div>
     );
 };
