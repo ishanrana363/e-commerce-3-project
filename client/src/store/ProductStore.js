@@ -73,8 +73,14 @@ const productStore = create((set)=>({
     searchKeyword : '',
     setSearchKeyword : async (keyword)=>{
         set({searchKeyword:keyword})
-    }
-
+    },
+    Details:null,
+    DetailsRequest:async(id)=>{
+        let res=await axios.get(`/api/v1/ProductDetails/${id}`);
+        if(res.data['status']==="success"){
+            set({Details:res.data['data']})
+        }
+    },
 
 
 
