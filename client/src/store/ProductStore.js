@@ -2,52 +2,39 @@ import {create} from "zustand";
 import axios from "axios";
 
 const productStore = create((set)=>({
-    BrandList :null,
-    CategoryList : null,
-    SliderList : null ,
-    ByBrandList : null,
-    ByCategoryList : null ,
-    RemarkList : [],
-    BySimilerList : [],
-    ByKeyWord : [],
-    Details : [],
-    ReviewList : [],
 
+
+
+
+
+    BrandList :null,
     BrandListRequest : async () =>{
+        set({BrandList:null})
         let res = await axios.get("/api/v1/productBrandList"); // object literal
         if ( res.data.status ==="success"){
             await set({ BrandList : res?.data?.data })
         }
     },
 
+    CategoryList : null,
     CategoryListRequest : async () =>{
+        set({CategoryList:null})
         let res = await axios.get("/api/v1/productCategoryList");
         if ( res.data["status"] === "success"){
             set({ CategoryList : res.data["data"] })
         }
     },
 
+    SliderList : null ,
     SliderRequest : async () =>{
+        set({SliderList:null})
         let res = await axios.get("/api/v1/productSlider");
         if ( res.data["status"] === "success"){
             set({ SliderList : res.data["data"] })
         }
     },
 
-    ByBrandListRequest : async (brandID) =>{
-        let res = await axios.get(`/api/v1/productByBrandList/${brandID}`);
-        if (res.data["status"] === 'success'){
-            set({ByBrandList:res.data["data"]})
-        }
-    },
-
-    ByCategoryListRequest : async (categoryID) =>{
-        let res = await axios.get(`/api/v1/productByCategoryList/${categoryID}`);
-        if ( res.data["status"] === "success"){
-            set({ ByCategoryList : res.data["data"] })
-        }
-    },
-
+    RemarkList : null,
     RemarkListRequest : async (remark) =>{
         let res = await axios.get(`/api/v1/productRemarkList/${remark}`);
         if ( res.data["status"] === "success"){
@@ -55,14 +42,8 @@ const productStore = create((set)=>({
         }
     },
 
-    BySimilerListRequest : async (categoryID) =>{
-        let res = await axios.get(`/api/v1/productBySimilerList/${categoryID}`);
-        if ( res.data["status"] === "success"){
-            set({ BySimilerList : res.data["data"] })
-        }
-    },
 
-
+    ByKeyWord : [],
     ByKeyWordRequest : async (keyword) =>{
         let res = await axios.get(`/api/v1/productByKeyWord/${keyword}`);
         if ( res.data["status"] === "success"){
@@ -70,19 +51,7 @@ const productStore = create((set)=>({
         }
     },
 
-    DetailsRequest : async (productID) =>{
-        let res = await axios.get(`/api/v1/productDetails/${productID}`);
-        if ( res.data["status"] === "success"){
-            set({ Details : res.data["data"] })
-        }
-    },
 
-    ReviewListRequest : async (productID) =>{
-        let res = await axios.get(`/api/v1/productReviewList/${productID}`);
-        if ( res.data["status"] === "success"){
-            set({ ReviewList : res.data["data"] })
-        }
-    },
 
 
 }))
