@@ -2,11 +2,6 @@ import {create} from "zustand";
 import axios from "axios";
 
 const productStore = create((set)=>({
-
-
-
-
-
     BrandList :null,
     BrandListRequest : async () =>{
         set({BrandList:null})
@@ -43,13 +38,44 @@ const productStore = create((set)=>({
     },
 
 
-    ByKeyWord : [],
+
+
+
+    ListProduct : null,
+    ListByBrandRequest : async (brandID) =>{
+        set({ ListProduct : null })
+        let res = await axios.get(`/api/v1/productByBrandList/${brandID}`);
+        if ( res.data["status"] === "success"){
+            set({ ListProduct : res.data["data"] })
+        }
+    },
     ByKeyWordRequest : async (keyword) =>{
         let res = await axios.get(`/api/v1/productByKeyWord/${keyword}`);
         if ( res.data["status"] === "success"){
-            set({ ByKeyWord : res.data["data"] })
+            set({ ListProduct : res.data["data"] })
         }
     },
+    ListByCategoryRequest : async (categoryID) =>{
+        // set({ ListProduct : null })
+        let res = await axios.get(`/api/v1/productByCategoryList/${categoryID}`);
+        if ( res.data["status"] === "success"){
+            set({ ListProduct : res.data["data"] })
+        }
+    },
+    ListByFilterRequest : async (postBody) =>{
+        set({ ListProduct : null })
+        let res = await axios.post(`/api/v1/productListFilter/`,postBody);
+        if ( res.data["status"] === "success"){
+            set({ ListProduct : res.data["data"] })
+        }
+    },
+
+    searchKeyword : '',
+    setSearchKeyword : async (keyword)=>{
+        set({searchKeyword:keyword})
+    }
+
+
 
 
 

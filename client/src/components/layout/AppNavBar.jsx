@@ -4,7 +4,7 @@ import productStore from "../../store/ProductStore.js";
 import {Form} from "react-bootstrap";
 
 const AppNavBar = () => {
-    const {ByKeyWord,ByKeyWordRequest}=productStore();
+    const {searchKeyword,setSearchKeyword}=productStore();
     return (
         <>
         <div className= " container-fluid text-white p-2 bg-success " >
@@ -55,8 +55,8 @@ const AppNavBar = () => {
                         </ul>
                         <div className=" d-lg-flex">
                             <div className="input-group">
-                                <input  onChange={(e)=>ByKeyWordRequest(e.target.value)} className="form-control" type="search" placeholder="Search" aria-label="Search" />
-                                <Link to={ByKeyWord.length>0?`/by-keyword/${ByKeyWord}`:`/`} className="btn btn-outline-dark" type="submit">
+                                <input value={searchKeyword} onChange={(e)=>setSearchKeyword(e.target.value)} className="form-control" type="search" placeholder="Search" aria-label="Search" />
+                                <Link to= { searchKeyword.length>0 ? `by-keyword/${searchKeyword}` : `/` } className="btn btn-outline-dark" type="submit">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style={{ width: 24, height: 24 }}>
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                                     </svg>

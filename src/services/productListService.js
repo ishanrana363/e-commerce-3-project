@@ -176,7 +176,7 @@ const productByBrandListService = async (req) =>{
             status : "success",
             data : data
         }
-    }catch{
+    }catch(e){
         return{
             status : "fail",
             data : e.toString()
@@ -485,6 +485,52 @@ const productCreateReviewService = async (req) => {
     }
 }
 
+const listByFilterService = async (req) =>{
+    try {
+        let matchConditions = {};
+        if (req.body["categoryID"]){
+            matchConditions.categoryID = new mongoose.Types.ObjectId(req.body["categoryID"])
+        }
+        if (req.body["brandID"]){
+            matchConditions.brandID  = new mongoose.Types.ObjectId(req.body["brandID"])
+        }
+        let matchStage = { $match : matchConditions }
+        let addFieldStage = {
+            $addFields : {
+                numericPrice : { $toInt : "$price" }
+            }
+        }
+        let minPrice = parseInt(req.body["minPrice"])
+        let maxPrice = parseInt(req.body["maxPrice"])
+        let priceMatchCondition = {}
+        if (!isNaN(minPrice)){
+            priceMatchCondition["numericPrice"] = { $gte : minPrice }
+        }
+        if (!isNaN(maxPrice)){
+            priceMatchCondition["numericPrice"] =  {...priceMatchCondition["numericPrice"]|| {} },{ $lte : minPrice }
+        }
+        let priceMatch = { $match : priceMatchCondition }
+        let JoinWithBrandStage= {$lookup:{from:"brands",localField:"brandID",foreignField:"_id",as:"brand"}};
+        let JoinWithCategoryStage={$lookup:{from:"categories",localField:"categoryID",foreignField:"_id",as:"category"}};
+        let UnwindBrandStage={$unwind:"$brand"}
+        let UnwindCategoryStage={$unwind:"$category"}
+        let ProjectionStage={$project:{'brand._id':0,'category._id':0,'categoryID':0,'brandID':0}}
+        let data= await  productsModel.aggregate([
+            matchStage,
+            addFieldStage,
+            priceMatch,
+            JoinWithBrandStage,JoinWithCategoryStage,
+            UnwindBrandStage,UnwindCategoryStage, ProjectionStage
+        ])
+        return{
+            status:"success",
+            data:data
+        }
+    }catch (e) {
+
+    }
+}
+
 
 module.exports = {
     productCreateReviewService,
@@ -498,5 +544,6 @@ module.exports = {
     productDetailsService,
     productRemarkListService,
     productReviewListService,
-    ListByKeywordService
+    ListByKeywordService,
+    listByFilterService
 }
