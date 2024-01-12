@@ -347,71 +347,42 @@ const productBySimilerListService = async (req) => {
 // productBySimilerListService end
 
 
-const productByKeyWordService = async () =>{
 
-
-}
 
 // productDetailsService start
 
 const productDetailsService = async (req) =>{
-    try{
-        // get productID from req.params
-        let productId = new mongoose.Types.ObjectId(req.params.productID);
+    try {
+        let ProductID=new mongoose.Types.ObjectId(req.params.productID);
+        let MatchStage={$match:{_id:ProductID}}
 
-        // match productId && productID using matchStage operator
-        let matchStage = {
-            $match : {
-                _id : productId
-            }
-        }
+        let JoinWithBrandStage= {$lookup:{from:"brands",localField:"brandID",foreignField:"_id",as:"brand"}};
+        let JoinWithCategoryStage={$lookup:{from:"categories",localField:"categoryID",foreignField:"_id",as:"category"}};
+        let JoinWithDetailsStage={$lookup:{from:"productsdetails",localField:"_id",foreignField:"productID",as:"details"}};
 
-        // join brand id
-        let joinWithBrandID = {
-            $lookup : {
-                from:"brands",
-                localField:"brandID",
-                foreignField:"_id",
-                as:"brand"
-            }
-        }
+        let UnwindBrandStage={$unwind:"$brand"}
+        let UnwindCategoryStage={$unwind:"$category"}
+        let UnwindDetailsStage={$unwind:"$details"}
 
-        // join category id
 
-        let joinWithCategoryId = {
-            $lookup : {
-                from:"categories",
-                localField:"categoryID",
-                foreignField:"_id",
-                as:"category"
-            }
-        }
+        let ProjectionStage={$project:{'brand._id':0,'category._id':0,'categoryID':0,'brandID':0}}
 
-        // join product id
-        let joinWithProductID = {
-            $lookup : {
-                from:"productsdetails",
-                localField:"_id",
-                foreignField:"productID",
-                as:"product"
-            }
-        }
-
-        // find productdetails form productsModel using mongodb 
-        let data = await productsModel.aggregate([
-            matchStage,
-            joinWithBrandID,joinWithCategoryId,joinWithProductID
+        let data=await  productsModel.aggregate([
+            MatchStage,
+            JoinWithBrandStage,
+            JoinWithCategoryStage,
+            JoinWithDetailsStage,
+            UnwindBrandStage,
+            UnwindCategoryStage,
+            UnwindDetailsStage,
+            ProjectionStage,
         ])
-        return {
-            status: "success",
-            data: data
-        };
+        console.log(data)
 
-    }catch(e){
-        return {
-            status: "fail",
-            data: e.toString()
-        };
+        return {status:"success",data:data}
+    }
+    catch (e) {
+        return {status:"fail",data:e.toString()}
     }
 }
 
@@ -527,7 +498,7 @@ const listByFilterService = async (req) =>{
             data:data
         }
     }catch (e) {
-
+        return {status:"fail",data:e.toString()}
     }
 }
 
@@ -540,7 +511,6 @@ module.exports = {
     productByCategoryListService,
     productByBrandListService,
     productBySimilerListService,
-    productByKeyWordService,
     productDetailsService,
     productRemarkListService,
     productReviewListService,

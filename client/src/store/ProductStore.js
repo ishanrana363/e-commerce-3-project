@@ -56,7 +56,7 @@ const productStore = create((set)=>({
         }
     },
     ListByCategoryRequest : async (categoryID) =>{
-        // set({ ListProduct : null })
+        set({ ListProduct : null })
         let res = await axios.get(`/api/v1/productByCategoryList/${categoryID}`);
         if ( res.data["status"] === "success"){
             set({ ListProduct : res.data["data"] })
@@ -74,14 +74,24 @@ const productStore = create((set)=>({
     setSearchKeyword : async (keyword)=>{
         set({searchKeyword:keyword})
     },
-    Details:null,
-    DetailsRequest:async(id)=>{
-        let res=await axios.get(`/api/v1/ProductDetails/${id}`);
-        if(res.data['status']==="success"){
-            set({Details:res.data['data']})
+    Details : null ,
+    DetailsRequest: async (id) => {
+        set({ Details: null });
+        let res = await axios.get(`/api/v1/productDetails/${id}`);
+        console.log(res.data.data);
+        if (res.data["status"] === "success") {
+            set({ Details: res["data"]["data"] });
         }
     },
 
+    Review:null,
+    ReviewRequest:async(id)=>{
+        set({ Review : null })
+        let res=await axios.get(`/api/v1/productReviewList/${id}`);
+        if(res.data['status']==="success"){
+            set({Review:res.data['data']})
+        }
+    },
 
 
 

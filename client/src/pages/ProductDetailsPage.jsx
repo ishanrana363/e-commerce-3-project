@@ -1,22 +1,26 @@
-import Layout from "../components/layout/Layout.jsx";
-import ProductDetails from "../components/product/ProductDetails.jsx";
+import React, {useEffect} from 'react';
 import productStore from "../store/ProductStore.js";
 import {useParams} from "react-router-dom";
-import {useEffect} from "react";
-import Skeleton from "react-loading-skeleton";
+import Layout from "../components/layout/Layout.jsx";
+import ProductDetails from "../components/product/ProductDetails.jsx";
+import Brand from "../components/product/Brand.jsx";
 
 const ProductDetailsPage = () => {
-    const {id} = useParams()
-    const {DetailsRequest} = productStore()
+    const  {id} =  useParams()
+    const {DetailsRequest,ReviewRequest,BrandList,BrandListRequest} = productStore()
     useEffect(() => {
         (async ()=>{
             await DetailsRequest(id)
+            await ReviewRequest(id)
+            BrandList === null ? await BrandListRequest() : null
         })()
     }, []);
     return (
         <div>
+
             <Layout>
-                    <ProductDetails/>
+                <ProductDetails/>
+                <Brand/>
             </Layout>
         </div>
     );
