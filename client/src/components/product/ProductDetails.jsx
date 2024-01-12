@@ -1,9 +1,19 @@
-import React from 'react';
+import React, {useState} from 'react';
 import productStore from "../../store/ProductStore.js";
 import DetailsSkleton from "../../skeleton/DetailsSkleton.jsx";
 import ProductImages from "./ProductImages.jsx";
+import parser from "html-react-parser"
 
 const ProductDetails = () => {
+    const [data, setData] = useState(1)
+    const incrementData = () => {
+        setData(data+1)
+    }
+    const decrementData = () => {
+        if (data>1){
+            setData(data-1)
+        }
+    }
     const {Details} = productStore()
     if (Details === null) {
         return <DetailsSkleton/>
@@ -24,30 +34,40 @@ const ProductDetails = () => {
                             {
                                 Details[0]["discount"] === true ?
                                     (
-                                        <span>price : <strike className="text-secondary"> { Details[0]["price"] } </strike> <span className= " text-primary m-2 " >{ Details[0]["discountPrice"] }</span>  </span>
+                                        <span className="bodyXLarge " >price : <strike className="text-secondary"> { Details[0]["price"] } </strike> <span className= " text-primary m-2 " >{ Details[0]["discountPrice"] }</span>  </span>
                                     ) : (
-                                        <span><strike className="text-secondary">$price</strike> $discountPrice </span>
+                                        <span> price : { Details[0]["price"] } </span>
                                     )
                             }
                             <div className="row">
                                 <div className="col-4 p-2">
                                     <label className="bodySmal">Size</label>
                                     <select className="form-control my-2 form-select">
-                                        <option value="">Size</option>
+
+                                        {
+                                            Details[0]["details"]["size"].split(",").map((list,i)=>{
+                                                return( <option key={i} value={list} > { list } </option> )
+                                            })
+                                        }
                                     </select>
                                 </div>
                                 <div className="col-4 p-2">
                                     <label className="bodySmal">Color</label>
                                     <select className="form-control my-2 form-select">
                                         <option value="">Color</option>
+                                        {
+                                            Details[0]["details"]["color"].split(",").map((list,i)=>{
+                                                return( <option key={i} value={list} > { list } </option> )
+                                            })
+                                        }
                                     </select>
                                 </div>
                                 <div className="col-4 p-2">
                                     <label className="bodySmal">Quantity</label>
                                     <div className="input-group my-2">
-                                        <button className="btn btn-outline-secondary">-</button>
-                                        <input type="text" className="form-control bg-light text-center" readOnly />
-                                        <button className="btn btn-outline-secondary">+</button>
+                                        <button onClick={decrementData} className="btn btn-outline-secondary">-</button>
+                                        <input value={data} type="text" className="form-control bg-light text-center" readOnly />
+                                        <button onClick={incrementData} className="btn btn-outline-secondary">+</button>
                                     </div>
                                 </div>
                                 <div className="col-4 p-2">
@@ -64,6 +84,7 @@ const ProductDetails = () => {
                             <li className="nav-item" role="presentation">
                                 <button className="nav-link active" id="Speci-tab" data-bs-toggle="tab" data-bs-target="#Specitab-pane"
                                         type="button" role="tab" aria-controls="Speci-tab-pane" ariaselected="true">Specifications</button>
+
                             </li>
                             <li className="nav-item" role="presentation">
                                 <button className="nav-link" id="Review-tab" data-bs-toggle="tab" data-bs-target="#Review-tab-
@@ -72,10 +93,16 @@ const ProductDetails = () => {
                         </ul>
                         <div className="tab-content" id="myTabContent">
                             <div className="tab-pane fade show active" id="Speci-tab-pane" role="tabpanel"
-                                 arialabelledby="Speci-tab" tabIndex="0"></div>
+                                 arialabelledby="Speci-tab" tabIndex="0">
+                                {
+                                    parser( Details[0]["details"]["des"])
+                                }
+                            </div>
                             <div className="tab-pane fade" id="Review-tab-pane" role="tabpanel" aria-labelledby="Review-tab"
                                  tabIndex="0">
-                                <ul className="list-group list-group-flush"></ul>
+                                <ul className="list-group list-group-flush">
+
+                                </ul>
                             </div>
                         </div>
                     </div>
